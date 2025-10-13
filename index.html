@@ -3,204 +3,821 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>帶參數的 QR Code 產生器</title>
+    <title>電子飛鏢機台 問題排查與回報</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 引入 QR Code 生成函式庫 -->
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #111827;
         }
-        .container {
-            max-width: 600px;
-            margin: 2rem auto;
-            padding: 2rem;
+        .cyber-card {
+            background-color: rgba(31, 41, 55, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(75, 85, 99, 0.5);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.2), 0 0 5px rgba(0, 255, 255, 0.1) inset;
         }
-        .input-group {
-            margin-bottom: 1.5rem;
+        .cyber-button {
+            background-color: #0891b2;
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(8, 145, 178, 0.7);
+            border: 1px solid #0e7490;
+            word-break: break-word;
         }
-        #qrcode-container {
-            width: 256px;
-            height: 256px;
-            margin: 1.5rem auto;
-            border: 1px solid #e5e7eb;
-            border-radius: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            background-color: white;
+        .cyber-button:hover:not(:disabled) {
+            background-color: #06b6d4;
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.9);
+        }
+         .cyber-button:disabled {
+            background-color: #4b5563;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .cyber-button-secondary {
+             background-color: transparent;
+             border: 1px solid #0891b2;
+             color: #0891b2;
+        }
+        .cyber-button-secondary:hover {
+            background-color: rgba(8, 145, 178, 0.2);
+            color: #06b6d4;
+        }
+        .lang-button {
+            background-color: #374151;
+            color: #d1d5db;
+        }
+        .lang-button.active {
+            background-color: #0891b2;
+            color: white;
+            box-shadow: 0 0 8px rgba(8, 145, 178, 0.7);
+        }
+        .cyber-input {
+            background-color: #1f2937;
+            border: 1px solid #4b5563;
+            color: white;
             transition: all 0.3s ease;
         }
-        #qrcode-container.empty {
-            background-color: #f9fafb;
+        .cyber-input:focus {
+            outline: none;
+            border-color: #0891b2;
+            box-shadow: 0 0 10px rgba(8, 145, 178, 0.5);
         }
-        .generated-url-container {
-            word-wrap: break-word;
-            background-color: #f3f4f6;
+        .cyber-input:disabled {
+            background-color: #374151;
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+        .cyber-input.invalid {
+            border-color: #ef4444;
+            animation: shake 0.5s;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        .neon-text {
+            color: #06b6d4;
+            text-shadow: 0 0 5px rgba(6, 182, 212, 0.7), 0 0 10px rgba(6, 182, 212, 0.5);
+        }
+        #game-screen, #report-screen {
+            display: none;
+        }
+        .checkbox-label {
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            word-break: break-word;
+        }
+        .checkbox-label input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+        .checkmark {
+            position: relative; 
+            flex-shrink: 0; 
+            height: 25px;
+            width: 25px;
+            background-color: #1f2937;
+            border: 1px solid #4b5563;
+            border-radius: 4px;
+        }
+        .checkbox-label:hover input ~ .checkmark {
+            background-color: #374151;
+        }
+        .checkbox-label input:checked ~ .checkmark {
+            background-color: #0891b2;
+        }
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+        .checkbox-label input:checked ~ .checkmark:after {
+            display: block;
+        }
+        .checkbox-label .checkmark:after {
+            left: 9px;
+            top: 5px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 3px 3px 0;
+            -webkit-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+        .accordion-button {
+            background-color: #1f2937;
+            border: 1px solid #4b5563;
+            color: white;
+            width: 100%;
+            text-align: left;
             padding: 0.75rem 1rem;
             border-radius: 0.375rem;
-            border: 1px solid #e5e7eb;
-            font-family: monospace;
-            color: #1f2937;
-            margin-top: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem; 
+            word-break: break-word; 
         }
+        .accordion-button span {
+            flex-shrink: 0; 
+        }
+        .accordion-button:hover {
+            background-color: #374151;
+        }
+        .accordion-content {
+            display: none;
+            padding: 1rem;
+            background-color: rgba(17, 24, 39, 0.5);
+            border: 1px solid #374151;
+            border-top: none;
+            border-radius: 0 0 0.375rem 0.375rem;
+        }
+        .accordion-button.game-01-game { color: #38bdf8; } 
+        .accordion-button.game-cricket { color: #2dd4bf; } 
+        .accordion-button.game-practice { color: #4ade80; } 
+        .accordion-button.game-party { color: #facc15; } 
+        .accordion-button.game-match { color: #fb923c; } 
+        .accordion-button.game-online { color: #f472b6; } 
     </style>
 </head>
-<body class="bg-gray-50">
+<body class="text-white min-h-screen flex items-start justify-center p-4 sm:p-8 bg-gray-900">
 
-    <div class="container bg-white shadow-lg rounded-lg">
-        <div class="text-center">
-            <h1 class="text-2xl font-bold text-gray-800">回報表單 QR Code 產生器</h1>
-            <p class="mt-2 text-gray-600">請填入下方資訊，即可即時產生帶有指定序號的 QR Code。</p>
-            <!-- 新增的區塊，用來顯示從網址帶入的序號，預設隱藏 -->
-            <div id="serial-display" class="mt-4 p-3 bg-indigo-50 border border-indigo-200 rounded-lg" style="display: none;">
-                <label for="serial-field" class="block text-sm font-medium text-indigo-800 mb-1">偵測到網址帶入的序號</label>
-                <input type="text" id="serial-field" name="product_serial" class="w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-center" readonly>
+    <div class="w-full max-w-lg mx-auto">
+        <!-- Start Screen -->
+        <div id="start-screen" class="cyber-card rounded-lg p-6 sm:p-8 space-y-6">
+            <div class="absolute top-4 right-4">
+                <div class="flex space-x-1 rounded-md p-1 bg-gray-800">
+                    <button id="lang-zh" class="lang-button px-3 py-1 text-sm rounded-md transition-all">中文</button>
+                    <button id="lang-en" class="lang-button px-3 py-1 text-sm rounded-md transition-all">EN</button>
+                </div>
+            </div>
+            <h1 id="main-title" class="text-2xl sm:text-3xl font-bold text-center neon-text">問題排查與回報</h1>
+            <p id="main-subtitle" class="text-center text-gray-300">請輸入您的名稱與機台資訊，開始進行問題排查。</p>
+            <div class="space-y-4">
+                <div>
+                    <label id="label-challenger-name" for="challenger-name" class="block text-sm font-medium text-gray-300 mb-1">名稱</label>
+                    <input type="text" id="challenger-name" class="cyber-input w-full p-3 rounded-md" placeholder="例如：維修人員A">
+                </div>
+                <div>
+                    <label id="label-machine-sn" for="machine-sn" class="block text-sm font-medium text-gray-300 mb-1">機台 SN</label>
+                    <input type="text" id="machine-sn" class="cyber-input w-full p-3 rounded-md" placeholder="請輸入機台背面的序號">
+                </div>
+                <div>
+                    <label id="label-file-id" for="file-id" class="block text-sm font-medium text-gray-300 mb-1">File ID</label>
+                    <input type="text" id="file-id" class="cyber-input w-full p-3 rounded-md" disabled>
+                </div>
+            </div>
+            <button id="start-button" class="cyber-button w-full py-3 rounded-md font-bold text-lg">開始</button>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="cyber-card rounded-lg p-6 sm:p-8">
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <button id="back-button" class="cyber-button-secondary px-3 py-1 rounded-md text-sm mb-2" style="display: none;">&larr; <span class="btn-text">回上一關</span></button>
+                    <h2 id="question-title" class="text-xl sm:text-2xl font-bold neon-text"></h2>
+                </div>
+                <button id="reset-button" class="cyber-button-secondary px-3 py-1 rounded-md text-sm"><span class="btn-text">重新開始</span></button>
+            </div>
+            <p id="question-text" class="text-gray-300 mb-6"></p>
+            <div id="options-container" class="space-y-4">
             </div>
         </div>
 
-        <div class="mt-8">
-            <!-- 表單網址 -->
-            <div class="input-group">
-                <label for="baseUrl" class="block text-sm font-medium text-gray-700 mb-1">1. 回報表單的基礎網址</label>
-                <input type="url" id="baseUrl" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="例如：https://www.example.com/report">
+        <!-- Report/Solution Screen -->
+        <div id="report-screen" class="cyber-card rounded-lg p-6 sm:p-8 space-y-6">
+             <div class="flex justify-between items-center">
+                <h2 id="solution-title" class="text-xl sm:text-2xl font-bold neon-text">診斷結果</h2>
+                <button id="back-to-start-button" class="cyber-button-secondary px-3 py-1 rounded-md text-sm"><span class="btn-text">重新開始</span></button>
             </div>
-
-            <!-- 參數名稱 -->
-            <div class="input-group">
-                <label for="paramName" class="block text-sm font-medium text-gray-700 mb-1">2. 序號的參數名稱 (Key)</label>
-                <input type="text" id="paramName" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="例如：serial_number 或 sn">
+            <div id="solution-text" class="bg-gray-900/50 p-4 rounded-md border border-cyan-500 text-cyan-200 whitespace-pre-wrap">
             </div>
-
-            <!-- 序號值 -->
-            <div class="input-group">
-                <label for="paramValue" class="block text-sm font-medium text-gray-700 mb-1">3. 這次要帶入的序號 (Value)</label>
-                <input type="text" id="paramValue" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="例如：ABC-12345-XYZ">
-            </div>
-        </div>
-
-        <div class="mt-6">
-             <h2 class="text-lg font-semibold text-gray-800">產生的結果</h2>
-            <div class="generated-url-container">
-                <p id="generatedUrl" class="text-sm">請在上方填寫資訊...</p>
-            </div>
-            <div id="qrcode-container" class="empty">
-                <span id="qrcode-placeholder" class="text-gray-500">QR Code 將顯示於此</span>
-                <canvas id="qrcode-canvas"></canvas>
+            
+            <div class="border-t border-gray-600 pt-6">
+                <h3 id="report-q-title" class="text-lg sm:text-xl font-bold text-center text-amber-400">問題尚未解決？</h3>
+                <p id="report-q-subtitle" class="text-center text-gray-300 mb-4">請提供詳細資訊，我們將儘快為您處理。</p>
+                <form id="problem-report-form" class="space-y-4">
+                    <div>
+                        <label id="label-description" for="description" class="block text-sm font-medium text-gray-300 mb-1">問題描述</label>
+                        <textarea id="description" rows="4" class="cyber-input w-full p-3 rounded-md" placeholder="請詳細描述遇到的問題，例如：\n1. 發生問題的時間點\n2. 進行過哪些操作\n3. 錯誤訊息內容"></textarea>
+                    </div>
+                    <div>
+                        <label id="label-file-upload" for="file-upload" class="block text-sm font-medium text-gray-300 mb-1">上傳照片或影片 (可多選)</label>
+                        <div class="cyber-input w-full p-0 rounded-md flex items-center overflow-hidden">
+                            <label for="file-upload" id="file-upload-button-label" class="cursor-pointer shrink-0 px-4 py-2 text-sm font-semibold bg-cyan-600 text-white hover:bg-cyan-700 transition-colors">
+                                選擇檔案
+                            </label>
+                            <span id="file-count-text" class="px-3 text-gray-400 text-sm truncate">未選擇任何檔案</span>
+                        </div>
+                        <input type="file" id="file-upload" class="hidden" multiple>
+                        <div id="file-list" class="mt-2 text-sm text-gray-400"></div>
+                    </div>
+                    <button id="submit-report-button" type="submit" class="cyber-button w-full py-3 rounded-md font-bold">送出回報</button>
+                </form>
             </div>
         </div>
     </div>
 
-    <script>
-        const baseUrlInput = document.getElementById('baseUrl');
-        const paramNameInput = document.getElementById('paramName');
-        const paramValueInput = document.getElementById('paramValue');
-        const generatedUrlOutput = document.getElementById('generatedUrl');
-        const qrcodeContainer = document.getElementById('qrcode-container');
-        const qrcodePlaceholder = document.getElementById('qrcode-placeholder');
-        const canvas = document.getElementById('qrcode-canvas');
+<script>
+    const startScreen = document.getElementById('start-screen');
+    const gameScreen = document.getElementById('game-screen');
+    const reportScreen = document.getElementById('report-screen');
+    const startButton = document.getElementById('start-button');
+    const challengerNameInput = document.getElementById('challenger-name');
+    const machineSnInput = document.getElementById('machine-sn');
+    const fileIdInput = document.getElementById('file-id');
+    const questionTitle = document.getElementById('question-title');
+    const questionText = document.getElementById('question-text');
+    const optionsContainer = document.getElementById('options-container');
+    const solutionTitle = document.getElementById('solution-title');
+    const solutionText = document.getElementById('solution-text');
+    const backButton = document.getElementById('back-button');
+    const resetButton = document.getElementById('reset-button');
+    const backToStartButton = document.getElementById('back-to-start-button');
+    const reportForm = document.getElementById('problem-report-form');
+    const langZhButton = document.getElementById('lang-zh');
+    const langEnButton = document.getElementById('lang-en');
+    const fileUploadInput = document.getElementById('file-upload');
+    const fileListDisplay = document.getElementById('file-list');
+    const submitReportButton = document.getElementById('submit-report-button');
+    
+    let currentLanguage = 'zh';
+    let historyStack = [];
+    let diagnosticPath = [];
+    let diagnosticPathZh = [];
+    let selectedGames = {};
+    let selectedSegments = {};
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwAspP3nmFbZJAG1z4nuBQSvf6DlZMGAMyhrojuKi0XWFtMoobNK_kpEol3GrkEGfIX/exec'; 
 
-        // 處理從網址帶入的序號
-        document.addEventListener('DOMContentLoaded', function() {
-            // 1. 解析網址參數
-            const urlParams = new URLSearchParams(window.location.search);
-            
-            // 2. 取得名為 "sn" 的參數值
-            const serialNumber = urlParams.get('sn');
-            
-            // 3. 如果有成功取得到序號
-            if (serialNumber) {
-                const serialDisplayDiv = document.getElementById('serial-display');
-                const serialInputField = document.getElementById('serial-field');
-
-                // 顯示並填入序號顯示框
-                if (serialDisplayDiv && serialInputField) {
-                    serialInputField.value = serialNumber;
-                    serialDisplayDiv.style.display = 'block';
-                }
-
-                // 4. 將參數名稱 'sn' 和序號值預填到產生器對應的欄位
-                paramNameInput.value = 'sn';
-                paramValueInput.value = serialNumber;
-
-                // 5. 將欄位設為唯讀並改變樣式，防止使用者修改
-                paramNameInput.readOnly = true;
-                paramNameInput.classList.add('bg-gray-100', 'cursor-not-allowed');
-                paramValueInput.readOnly = true;
-                paramValueInput.classList.add('bg-gray-100', 'cursor-not-allowed');
-
-                // 6. 將焦點移至基礎網址輸入框，引導使用者
-                baseUrlInput.focus();
-                baseUrlInput.placeholder = "請在這裡輸入回報表單網址";
-
-                // 自動觸發一次產生，以顯示提示訊息 (如果 base url 為空)
-                generate();
+    const translations = {
+        zh: {
+            mainTitle: "問題排查與回報",
+            mainSubtitle: "請輸入您的名稱與機台資訊，開始進行問題排查。",
+            challengerNameLabel: "名稱",
+            challengerNamePlaceholder: "例如：維修人員A",
+            machineSnLabel: "機台 SN",
+            machineSnPlaceholder: "請輸入機台背面的序號",
+            fileIdLabel: "File ID",
+            startButton: "開始",
+            backButton: "回上一關",
+            resetButton: "重新開始",
+            solutionTitle: "診斷結果",
+            reportQTitle: "問題尚未解決？",
+            reportQSubtitle: "請提供詳細資訊，我們將儘快為您處理。",
+            descriptionLabel: "問題描述",
+            descriptionPlaceholder: "請詳細描述遇到的問題，例如：\n1. 發生問題的時間點\n2. 進行過哪些操作\n3. 錯誤訊息內容",
+            fileUploadLabel: "上傳照片或影片 (可多選)",
+            fileUploadButton: "選擇檔案",
+            submitReportButton: "送出回報",
+            submittingReportButton: "傳送中...",
+            alertFillInfo: "請輸入您的名稱與機台SN！",
+            alertFillDescription: "請填寫問題描述！",
+            reportSentTitle: "回報已送出",
+            reportSentText: "感謝您的回報！\n我們已收到並記錄您的問題，將會協助轉告相關負責單位進行處理。\n\n您可以關閉此頁面或重新開始。",
+            reportErrorTitle: "傳送失敗",
+            reportErrorText: "抱歉，回報傳送失敗，請檢查您的網路連線或稍後再試。\n錯誤細節: ",
+            noFileSelected: "未選擇任何檔案",
+            filesSelected: "已選擇 {count} 個檔案：",
+            fileCountText: "{count} 個檔案",
+            tree: {
+                'start': { title: '關卡 1：問題分類', question: '請問您遇到的是哪一類型的問題？', options: [{ text: '硬體問題', next: 'hardware' }, { text: '軟體問題', next: 'software' }] },
+                'hardware': { title: '關卡 2：硬體問題', question: '是關於哪個硬體部分的問題？', options: [{ text: '螢幕', next: 'screen' }, { text: '喇叭', next: 'speaker' }, { text: '鏢靶', next: 'dartboard' }, { text: 'LED燈', next: 'led' }, { text: '投幣問題', next: 'payment' }, { text: '攝影機', next: 'camera' }, { text: '其他', next: 'other_issue' }] },
+                'software': { title: '關卡 2：軟體問題', question: '是關於哪個軟體部分的問題？', options: [{ text: '遊戲畫面卡頓/凍結', next: 'game_selection_accordion', final_next: 'freeze' }, { text: '遊戲分數計算錯誤', next: 'game_selection_accordion', final_next: 'scoring_error' }, { text: '無法連線/網路問題', next: 'network' }, { text: '無法登入帳號', next: 'login_fail' }, { text: '其他', next: 'other_issue' }] },
+                'other_issue': { solution: `您選擇了「其他」。\n\n請在下方的回報表單中，盡可能詳細地描述您遇到的問題，以便我們能更準確地為您服務。` },
+                'game_selection_accordion': { title: '遊戲選擇', question: '請問是在哪個遊戲中發生的問題？（可多選）', type: 'accordion', sections: [ { title: '01 GAME', options: ['301', '501', '701', '901', '1101', '1501'] }, { title: 'CRICKET', options: ['CRICKET', 'CUT THROAT', 'NO SCORE', 'RANDOM', 'HIDDEN'] }, { title: 'PRACTICE', options: ['COUNT UP', 'CRICKET COUNT UP', 'BULL HUNTER', 'RANDOM CHECKOUT', 'FIREWORKS'] }, { title: 'PARTY', options: ['FRISBEE', 'SUPER BULL', 'BINGO LINE', 'SOCCER PK', 'BALLOON', 'FIREWORKS', 'SLOT', 'BOWLING', 'FISHING', 'IRON FLEET'] }, { title: 'MATCH', options: ['MATCH'] }, { title: 'ONLINE', options: ['01 GAME', 'CRICKET'] } ] },
+                'screen': { title: '螢幕問題', question: '是哪個螢幕有問題？', options: [{ text: '上螢幕', next: 'upper_screen_details' }, { text: '觸控螢幕', next: 'touch_screen_details' }] },
+                'upper_screen_details': { title: '上螢幕狀況', question: '上螢幕出現了什麼狀況？', options: [{ text: '完全沒有畫面 (黑屏)', next: 'screen_black' }, { text: '畫面顯示異常 (花屏/條紋)', next: 'screen_glitch' }] },
+                'touch_screen_details': { title: '觸控螢幕狀況', question: '觸控螢幕出現了什麼狀況？', options: [{ text: '完全沒有畫面 (黑屏)', next: 'screen_black' }, { text: '畫面顯示異常 (花屏/條紋)', next: 'screen_glitch' }, { text: '觸控螢幕沒反應', next: 'screen_touch' }] },
+                'screen_black': { solution: `處理方法：\n1. 請優先檢查機台總電源是否開啟，以及連接螢幕的電源線是否牢固。\n2. 重新啟動機台，觀察螢幕是否在開機時有短暫亮起。\n3. 若以上方法無效，可能是螢幕本身或內部線路故障。` },
+                'screen_glitch': { solution: `處理方法：\n1. 重新啟動機台，這能解決暫時性的顯示問題。\n2. 檢查螢幕訊號線 (HDMI) 是否鬆脫，請重新插拔一次。\n3. 若問題持續，可能是顯示卡或螢幕硬體問題。` },
+                'screen_touch': { solution: `處理方法：\n1. 使用乾淨的軟布清潔螢幕表面，排除灰塵或污漬干擾。\n2. 重新啟動機台，載入觸控驅動程式。\n3. 進入後台管理系統，檢查是否能進行觸控校準。` },
+                'speaker': { title: '喇叭問題', question: '哪個喇叭有問題？', options: [{ text: '上方喇叭', next: 'speaker_solution' }, { text: '下方喇叭', next: 'speaker_solution' }] },
+                'speaker_solution': { solution: `處理方法：\n1. 檢查對應喇叭的連接線是否鬆脫或破損。\n2. 進入後台管理系統的「音效測試」，確認是否有聲音輸出。\n3. 若無聲音，可能是喇叭單體損壞或主機板音效輸出異常。` },
+                'dartboard': { title: '鏢靶問題', question: '鏢靶出現了什麼狀況？', options: [
+                    { text: '特定靶塊無法感應分數', next: 'dartboard_selection_accordion', final_next: 'segment_fail' }, 
+                    { text: '分數感應錯誤 (鬼中/誤判)', next: 'dartboard_selection_accordion', final_next: 'segment_ghost' }, 
+                    { text: '靶塊破損或脫落', next: 'dartboard_selection_accordion', final_next: 'segment_broken' }
+                ] },
+                'dartboard_selection_accordion': { title: '鏢靶區域選擇', question: '請點開下方區域，勾選有問題的確切位置。', type: 'accordion', sections: [ { title: '雙倍 (1-20)', options: Array.from({length: 20}, (_, i) => String(i + 1)) }, { title: '外單 (1-20)', options: Array.from({length: 20}, (_, i) => String(i + 1)) }, { title: '三倍 (1-20)', options: Array.from({length: 20}, (_, i) => String(i + 1)) }, { title: '內單 (1-20)', options: Array.from({length: 20}, (_, i) => String(i + 1)) }, { title: '紅心', options: ['內紅心', '外紅心'] } ] },
+                'segment_fail': { solution: `處理方法：\n1. 針對選擇的區域，檢查其周圍是否有異物(如斷掉的鏢針)卡住。\n2. 進入後台的「靶塊測試」功能，逐一確認感應是否正常。\n3. 若測試無效，可能需要更換該靶塊的感應膜片。` },
+                'segment_ghost': { solution: `處理方法：\n1. 強力衝擊或震動可能導致此問題，請先重新開機。\n2. 進入後台「靶塊測試」，確認選擇的區域是否為固定區域誤判。\n3. 此問題通常與感應膜片受潮或老化有關，可能需要更換。` },
+                'segment_broken': { solution: `處理方法：\n1. 為了安全及後續玩家的遊戲體驗，請暫停使用此機台。\n2. 針對選擇的區域拍照記錄破損情況。\n3. 聯繫客服並準備更換對應的靶塊零件。` },
+                'led': { title: 'LED燈問題', question: '是哪個部分的LED燈？', options: [{ text: '靶塊上的LED燈', next: 'led_accordion' }, { text: '外圈呼吸燈', next: 'led_breathing' }] },
+                'led_accordion': { title: '靶塊LED問題', question: '請點開下方區域，勾選有問題的LED燈號。', type: 'accordion', next: 'led_segments_solution', sections: [ { title: '雙倍 (1-20)', options: Array.from({length: 20}, (_, i) => String(i + 1)) }, { title: '外單 (1-20)', options: Array.from({length: 20}, (_, i) => String(i + 1)) }, { title: '三倍 (1-20)', options: Array.from({length: 20}, (_, i) => String(i + 1)) }, { title: '內單 (1-20)', options: Array.from({length: 20}, (_, i) => String(i + 1)) }, { title: '紅心', options: ['內紅心', '外紅心'] } ] },
+                'led_segments_solution': { solution: `處理方法：\n1. 針對選擇的靶塊與區域，檢查其後方的LED燈條連接線是否鬆脫。\n2. 進入後台「LED燈測試」功能，確認是否能點亮。\n3. 若無法點亮，可能是LED燈條損壞或控制板問題。` },
+                'led_breathing': { solution: `處理方法：\n1. 檢查圍繞機台外圈的呼吸燈條電源線與訊號線是否牢固。\n2. 重新啟動機台，觀察開機時燈條是否閃爍。\n3. 若無反應，可能是燈條本身或其獨立的控制器故障。` },
+                'payment': { title: '投幣問題', question: '投幣器出現了什麼狀況？', options: [{ text: '投幣後未加點數 (吃錢)', next: 'coin_eat' }, { text: '硬幣無法投入 / 被退回', next: 'coin_reject' }] },
+                'coin_eat': { solution: `處理方法：\n1. 打開投幣器通道，檢查是否有硬幣或異物卡住。\n2. 檢查投幣器內部的微動開關是否正常觸發。\n3. 重新啟動機台，測試是否恢復正常。` },
+                'coin_reject': { solution: `處理方法：\n1. 確認是否使用正確的代幣或硬幣。\n2. 檢查投幣口是否有異物阻塞，並予以排除。\n3. 打開投幣器，檢查內部通道是否順暢，有無卡幣。\n4. 若問題持續，可能是投幣器的電子眼或機械結構故障。` },
+                'camera': { title: '攝影機問題', question: '哪一個攝影機有問題？', options: [{ text: '上方攝影機 (靶面視角)', next: 'camera_solution' }, { text: '下方攝影機 (玩家視角)', next: 'camera_solution' }] },
+                'camera_solution': { solution: `處理方法：\n1. 請確認出廠膜是否已撕除。\n2. 使用不起毛的軟布輕輕擦拭攝影機鏡頭。\n3. 檢查攝影機的USB連接線是否牢固地插在主機板上。\n4. 重新啟動機台，進入後台測試攝影機畫面是否正常顯示。` },
+                'freeze': { solution: `處理方法：\n1. 請依序點擊：首頁左上角「地球圖示」→ 頁面左下角「問題回報」。建議拍照記錄回報成功的訊息、或記下操作時間點，以利工程師分析問題。\n2. 長按電源按鈕強制關機，等待30秒後再重新啟動。\n3. 檢查機台散熱風扇是否正常運轉，過熱可能導致當機。\n4. 若頻繁發生，可能是系統軟體或硬碟問題。` },
+                'scoring_error': { solution: `處理方法：\n1. 請依序點擊：首頁左上角「地球圖示」→ 頁面左下角「問題回報」。建議拍照記錄回報成功的訊息、或記下操作時間點，以利工程師分析問題。\n2. 重新啟動遊戲或機台，排除暫時性計算錯誤。\n3. 記錄下錯誤發生的遊戲模式、玩家與分數，便於工程師追查。` },
+                'network': { solution: `處理方法：\n1. 請依序點擊：首頁左上角「地球圖示」→ 頁面左下角「問題回報」。建議拍照記錄回報成功的訊息、或記下操作時間點，以利工程師分析問題。\n2. 檢查機台連接的網路線是否插好，或Wi-Fi訊號是否穩定。\n3. 重新啟動機台，讓它重新獲取網路設定。\n4. 檢查店家的路由器(Router)是否運作正常。` },
+                'login_fail': { solution: `處理方法：\n1. 請依序點擊：首頁左上角「地球圖示」→ 頁面左下角「問題回報」。建議拍照記錄回報成功的訊息、或記下操作時間點，以利工程師分析問題。\n2. 確認機台網路連線正常。\n3. 若所有帳號皆無法登入，可能是伺服器維護中，請稍後再試。` },
             }
+        },
+        en: {
+            mainTitle: "Troubleshooting & Report",
+            mainSubtitle: "Enter your name and machine info to start troubleshooting.",
+            challengerNameLabel: "Name",
+            challengerNamePlaceholder: "e.g., Technician A",
+            machineSnLabel: "Machine SN",
+            machineSnPlaceholder: "Enter the serial number on the back",
+            fileIdLabel: "File ID",
+            startButton: "Start",
+            backButton: "Back",
+            resetButton: "Restart",
+            solutionTitle: "Diagnosis Result",
+            reportQTitle: "Problem not solved?",
+            reportQSubtitle: "Please provide details for further assistance.",
+            descriptionLabel: "Problem Description",
+            descriptionPlaceholder: "Describe the issue in detail, e.g.,\n1. When did it happen?\n2. What operations were performed?\n3. Any error messages?",
+            fileUploadLabel: "Upload Photo or Video (multi-select enabled)",
+            fileUploadButton: "Choose File(s)",
+            submitReportButton: "Submit Report",
+            submittingReportButton: "Submitting...",
+            alertFillInfo: "Please enter your Name and Machine SN!",
+            alertFillDescription: "Please fill in the problem description!",
+            reportSentTitle: "Report Sent",
+            reportSentText: "Thank you for your report!\nWe have received and logged your issue, and will assist in forwarding it to the responsible party for handling.\n\nYou can now close this page or restart.",
+            reportErrorTitle: "Submission Failed",
+            reportErrorText: "Sorry, the report submission failed. Please check your internet connection and try again.\nError details: ",
+            noFileSelected: "No file selected",
+            filesSelected: "Selected {count} file(s):",
+            fileCountText: "{count} file(s) selected",
+            tree: {
+                'start': { title: 'Level 1: Problem Type', question: 'What type of problem are you encountering?', options: [{ text: 'Hardware Issue', next: 'hardware' }, { text: 'Software Issue', next: 'software' }] },
+                'hardware': { title: 'Level 2: Hardware Issue', question: 'Which hardware component is having an issue?', options: [{ text: 'Screen', next: 'screen' }, { text: 'Speaker', next: 'speaker' }, { text: 'Dartboard', next: 'dartboard' }, { text: 'LED', next: 'led' }, { text: 'Coin Issue', next: 'payment' }, { text: 'Camera', next: 'camera' }, { text: 'Other', next: 'other_issue' }] },
+                'software': { title: 'Level 2: Software Issue', question: 'What kind of software issue is it?', options: [{ text: 'Game screen freezes/lags', next: 'game_selection_accordion', final_next: 'freeze' }, { text: 'Incorrect score calculation', next: 'game_selection_accordion', final_next: 'scoring_error' }, { text: 'Connection/Network issue', next: 'network' }, { text: 'Account login failure', next: 'login_fail' }, { text: 'Other', next: 'other_issue' }] },
+                'other_issue': { solution: `You have selected "Other".\n\nPlease describe the issue you are facing in as much detail as possible in the report form below.` },
+                'game_selection_accordion': { title: 'Game Selection', question: 'In which game did the problem occur? (Multiple selections allowed)', type: 'accordion', sections: [ { title: '01 GAME', options: ['301', '501', '701', '901', '1101', '1501'] }, { title: 'CRICKET', options: ['CRICKET', 'CUT THROAT', 'NO SCORE', 'RANDOM', 'HIDDEN'] }, { title: 'PRACTICE', options: ['COUNT UP', 'CRICKET COUNT UP', 'BULL HUNTER', 'RANDOM CHECKOUT', 'FIREWORKS'] }, { title: 'PARTY', options: ['FRISBEE', 'SUPER BULL', 'BINGO LINE', 'SOCCER PK', 'BALLOON', 'FIREWORKS', 'SLOT', 'BOWLING', 'FISHING', 'IRON FLEET'] }, { title: 'MATCH', options: ['MATCH'] }, { title: 'ONLINE', options: ['01 GAME', 'CRICKET'] } ] },
+                'screen': { title: 'Screen Issue', question: 'Which screen has an issue?', options: [{ text: 'Upper Screen', next: 'upper_screen_details' }, { text: 'Touch Screen', next: 'touch_screen_details' }] },
+                'upper_screen_details': { title: 'Upper Screen Condition', question: 'What is wrong with the upper screen?', options: [{ text: 'No display (Black screen)', next: 'screen_black' }, { text: 'Display artifacting (Glitches/Lines)', next: 'screen_glitch' }] },
+                'touch_screen_details': { title: 'Touch Screen Condition', question: 'What is wrong with the touch screen?', options: [{ text: 'No display (Black screen)', next: 'screen_black' }, { text: 'Display artifacting (Glitches/Lines)', next: 'screen_glitch' }, { text: 'Touchscreen unresponsive', next: 'screen_touch' }] },
+                'screen_black': { solution: `Solution:\n1. Check if the main power is on and the screen's power cable is securely connected.\n2. Restart the machine and observe if the screen lights up briefly during boot.\n3. If the above fails, it might be a fault with the screen itself or internal wiring.` },
+                'screen_glitch': { solution: `Solution:\n1. Restart the machine to resolve temporary display issues.\n2. Check if the video signal cable (HDMI) is loose. Unplug and plug it back in.\n3. If the problem persists, it could be a graphics card or screen hardware issue.` },
+                'screen_touch': { solution: `Solution:\n1. Clean the screen surface with a soft, dry cloth to remove dust or smudges.\n2. Restart the machine to reload the touch drivers.\n3. Enter the admin panel to check if touch calibration is available.` },
+                'speaker': { title: 'Speaker Issue', question: 'Which speaker is having a problem?', options: [{ text: 'Upper Speaker', next: 'speaker_solution' }, { text: 'Lower Speaker', next: 'speaker_solution' }] },
+                'speaker_solution': { solution: `Solution:\n1. Check the corresponding speaker's connection cable for looseness or damage.\n2. Enter the "Sound Test" in the admin panel to confirm audio output.\n3. If there's no sound, the speaker unit may be damaged or there's an issue with the mainboard's audio output.` },
+                'dartboard': { title: 'Dartboard Issue', question: 'What is wrong with the dartboard?', options: [
+                    { text: 'A specific segment is not scoring', next: 'dartboard_selection_accordion', final_next: 'segment_fail' }, 
+                    { text: 'Incorrect score sensing (Ghost hits)', next: 'dartboard_selection_accordion', final_next: 'segment_ghost' }, 
+                    { text: 'Segment is broken or detached', next: 'dartboard_selection_accordion', final_next: 'segment_broken' }
+                ] },
+                'dartboard_selection_accordion': { title: 'Dartboard Area Selection', question: 'Please expand the sections below and check the exact faulty location.', type: 'accordion', sections: [ { title: 'Doubles (1-20)', options: Array.from({length: 20}, (_, i) => String(i + 1)) }, { title: 'Outer Singles (1-20)', options: Array.from({length: 20}, (_, i) => String(i + 1)) }, { title: 'Triples (1-20)', options: Array.from({length: 20}, (_, i) => String(i + 1)) }, { title: 'Inner Singles (1-20)', options: Array.from({length: 20}, (_, i) => String(i + 1)) }, { title: 'Bullseye', options: ['Inner Bull', 'Outer Bull'] } ] },
+                'segment_fail': { solution: `Solution:\n1. For the selected area, check for any foreign objects (like a broken tip) stuck around it.\n2. Use the "Segment Test" function in the admin panel to verify sensor functionality.\n3. If the test fails, the sensor matrix for that segment may need replacement.` },
+                'segment_ghost': { solution: `Solution:\n1. This can be caused by strong impacts. Try restarting the machine first.\n2. Use the "Segment Test" to see if the selected area is misfiring.\n3. This issue is often related to moisture or aging of the sensor matrix, which may need replacement.` },
+                'segment_broken': { solution: `Solution:\n1. For safety and player experience, please put the machine out of service.\n2. Take a photo of the damage in the selected area.\n3. Contact support to order a replacement segment.` },
+                'led': { title: 'LED Issue', question: 'Which part of the LED system is faulty?', options: [{ text: 'LEDs on the dartboard segments', next: 'led_accordion' }, { text: 'Outer ring "breathing" light', next: 'led_breathing' }] },
+                'led_accordion': { title: 'Segment LED Issue', question: 'Please expand the sections below and check the faulty LEDs.', type: 'accordion', next: 'led_segments_solution', sections: [ { title: 'Doubles (1-20)', options: Array.from({length: 20}, (_, i) => String(i + 1)) }, { title: 'Outer Singles (1-20)', options: Array.from({length: 20}, (_, i) => String(i + 1)) }, { title: 'Triples (1-20)', options: Array.from({length: 20}, (_, i) => String(i + 1)) }, { title: 'Inner Singles (1-20)', options: Array.from({length: 20}, (_, i) => String(i + 1)) }, { title: 'Bullseye', options: ['Inner Bull', 'Outer Bull'] } ] },
+                'led_segments_solution': { solution: `Solution:\n1. For the selected segments and areas, check the connection of the LED strip behind them.\n2. Use the "LED Test" function in the admin panel to see if they light up.\n3. If they don't light up, the LED strip or the control board might be faulty.` },
+                'led_breathing': { solution: `Solution:\n1. Check the power and signal cables for the outer ring light strip.\n2. Restart the machine and see if the lights flash during boot.\n3. If there's no response, the light strip or its dedicated controller might be faulty.` },
+                'payment': { title: 'Coin Issue', question: 'What is wrong with the coin mechanism?', options: [{ text: 'Takes coin but adds no credit', next: 'coin_eat' }, { text: 'Coin cannot be inserted / is rejected', next: 'coin_reject' }] },
+                'coin_eat': { solution: `Solution:\n1. Open the coin chute and check for stuck coins or foreign objects.\n2. Check if the internal microswitch is triggering correctly.\n3. Restart the machine and test again.` },
+                'coin_reject': { solution: `Solution:\n1. Ensure the correct token or coin is being used.\n2. Check the coin slot for any foreign object obstruction and remove it.\n3. Open the coin mechanism to check if the internal chute is clear and not jammed.\n4. If the problem persists, the coin selector's sensor or mechanical parts may be faulty.` },
+                'camera': { title: 'Camera Issue', question: 'Which camera has a problem?', options: [{ text: 'Upper Camera (Board View)', next: 'camera_solution' }, { text: 'Lower Camera (Player View)', next: 'camera_solution' }] },
+                'camera_solution': { solution: `Solution:\n1. Please confirm if the factory protective film has been removed.\n2. Gently wipe the camera lens with a lint-free cloth.\n3. Check if the camera's USB cable is securely plugged into the mainboard.\n4. Restart the machine and test the camera view in the admin panel.` },
+                'freeze': { solution: `Solution:\n1. Please click in order: Main Menu top-left 'Globe Icon' → Page bottom-left 'LOG REPORT' button. It's recommended to photograph the confirmation message or note the time of the report for analysis.\n2. Press and hold the power button to force shutdown, wait 30 seconds, then restart.\n3. Check if the cooling fans are running properly; overheating can cause freezes.\n4. If it happens frequently, it might be a software or hard drive issue.` },
+                'scoring_error': { solution: `Solution:\n1. Please click in order: Main Menu top-left 'Globe Icon' → Page bottom-left 'LOG REPORT' button. It's recommended to photograph the confirmation message or note the time of the report for analysis.\n2. Restart the game or the entire machine to rule out a temporary glitch.\n3. Note down the game mode, player, and score for engineers to investigate.` },
+                'network': { solution: `Solution:\n1. Please click in order: Main Menu top-left 'Globe Icon' → Page bottom-left 'LOG REPORT' button. It's recommended to photograph the confirmation message or note the time of the report for analysis.\n2. Check if the network cable is plugged in securely, or if the Wi-Fi signal is strong.\n3. Restart the machine to re-establish the network connection.\n4. Check if the location's router is working correctly.` },
+                'login_fail': { solution: `Solution:\n1. Please click in order: Main Menu top-left 'Globe Icon' → Page bottom-left 'LOG REPORT' button. It's recommended to photograph the confirmation message or note the time of the report for analysis.\n2. Confirm the machine's network connection is active.\n3. If no accounts can log in, the server might be under maintenance; try again later.` },
+            }
+        }
+    };
+    
+    function setLanguage(lang) {
+        currentLanguage = lang;
+        const t = translations[lang];
+        
+        langZhButton.classList.toggle('active', lang === 'zh');
+        langEnButton.classList.toggle('active', lang === 'en');
+
+        document.getElementById('main-title').textContent = t.mainTitle;
+        document.getElementById('main-subtitle').textContent = t.mainSubtitle;
+        document.getElementById('label-challenger-name').textContent = t.challengerNameLabel;
+        challengerNameInput.placeholder = t.challengerNamePlaceholder;
+        document.getElementById('label-machine-sn').textContent = t.machineSnLabel;
+        machineSnInput.placeholder = t.machineSnPlaceholder;
+        document.getElementById('label-file-id').textContent = t.fileIdLabel;
+        document.getElementById('start-button').textContent = t.startButton;
+
+        document.querySelectorAll('.btn-text').forEach(el => {
+            const parentId = el.parentElement.id;
+            if (parentId === 'back-button') el.textContent = t.backButton;
+            else if (parentId === 'reset-button' || parentId === 'back-to-start-button') el.textContent = t.resetButton;
         });
 
+        document.getElementById('report-q-title').textContent = t.reportQTitle;
+        document.getElementById('report-q-subtitle').textContent = t.reportQSubtitle;
+        document.getElementById('label-description').textContent = t.descriptionLabel;
+        document.getElementById('description').placeholder = t.descriptionPlaceholder;
+        document.getElementById('label-file-upload').textContent = t.fileUploadLabel;
+        document.getElementById('file-upload-button-label').textContent = t.fileUploadButton;
+        document.getElementById('submit-report-button').textContent = t.submitReportButton;
+        updateFileList();
+    }
 
-        function generate() {
-            const baseUrl = baseUrlInput.value.trim();
-            const paramName = paramNameInput.value.trim();
-            const paramValue = paramValueInput.value.trim();
+    function showScreen(screen) {
+        startScreen.style.display = 'none';
+        gameScreen.style.display = 'none';
+        reportScreen.style.display = 'none';
+        screen.style.display = 'block';
+    }
 
-            // 如果欄位不完整，就顯示預設訊息
-            if (!paramName || !paramValue) {
-                generatedUrlOutput.textContent = '請在上方填寫所有資訊...';
-                qrcodeContainer.classList.add('empty');
-                qrcodePlaceholder.style.display = 'block';
-                qrcodePlaceholder.textContent = 'QR Code 將顯示於此';
-                canvas.style.display = 'none';
-                return;
-            }
-            
-            // 如果只有基礎網址是空的，顯示特定提示
-            if (!baseUrl) {
-                generatedUrlOutput.innerHTML = '<span class="text-red-600 font-semibold">請輸入「回報表單的基礎網址」以產生 QR Code。</span>';
-                qrcodeContainer.classList.add('empty');
-                qrcodePlaceholder.style.display = 'block';
-                qrcodePlaceholder.textContent = '等待基礎網址...';
-                canvas.style.display = 'none';
-                // 清除舊的 canvas 內容
-                const context = canvas.getContext('2d');
-                context.clearRect(0, 0, canvas.width, canvas.height);
-                return;
-            }
+    function validateStartForm() {
+        let isValid = true;
+        challengerNameInput.classList.remove('invalid');
+        machineSnInput.classList.remove('invalid');
 
-            // 檢查網址是否已經有 '?'
-            const separator = baseUrl.includes('?') ? '&' : '?';
-            
-            // 使用 encodeURIComponent 來確保特殊字元被正確編碼
-            const fullUrl = `${baseUrl}${separator}${encodeURIComponent(paramName)}=${encodeURIComponent(paramValue)}`;
+        if (!challengerNameInput.value.trim()) {
+            challengerNameInput.classList.add('invalid');
+            isValid = false;
+        }
+        if (!machineSnInput.value.trim()) {
+            machineSnInput.classList.add('invalid');
+            isValid = false;
+        }
+        return isValid;
+    }
 
-            generatedUrlOutput.textContent = fullUrl;
-            
-            qrcodePlaceholder.style.display = 'none';
-            canvas.style.display = 'block';
-            qrcodeContainer.classList.remove('empty');
+    function startGame() {
+        if (!validateStartForm()) return;
+        
+        localStorage.setItem('challengerName', challengerNameInput.value.trim());
+        localStorage.setItem('machineSN', machineSnInput.value.trim());
+        localStorage.setItem('fileID', fileIdInput.value.trim());
+        
+        historyStack = [];
+        diagnosticPath = [];
+        diagnosticPathZh = [];
+        renderStep('start');
+        showScreen(gameScreen);
+    }
 
-            QRCode.toCanvas(canvas, fullUrl, { width: 256, margin: 1 }, function (error) {
-                if (error) {
-                    console.error(error);
-                    generatedUrlOutput.textContent = '產生 QR Code 時發生錯誤。';
-                    qrcodePlaceholder.textContent = '產生失敗';
-                    qrcodePlaceholder.style.display = 'block';
-                    canvas.style.display = 'none';
-                }
-            });
+    function renderStep(stepKey, nextOverride = null) {
+        const step = translations[currentLanguage].tree[stepKey];
+        if (!step) return;
+
+        backButton.style.display = historyStack.length > 0 ? 'inline-flex' : 'none';
+        
+        if (step.solution) {
+            solutionTitle.textContent = translations[currentLanguage].solutionTitle;
+            solutionText.textContent = step.solution;
+            reportForm.style.display = 'grid'; 
+            showScreen(reportScreen);
+            return;
         }
 
-        // 監聽所有輸入框的輸入事件
-        [baseUrlInput, paramNameInput, paramValueInput].forEach(input => {
-            input.addEventListener('input', generate);
-        });
+        questionTitle.textContent = step.title;
+        questionText.textContent = step.question;
+        optionsContainer.innerHTML = '';
 
-        // 初始載入時也執行一次
-        generate();
-    </script>
+        if (step.type === 'accordion') {
+            optionsContainer.className = 'space-y-2';
+            const accordionContainer = document.createElement('div');
+            accordionContainer.className = 'space-y-2';
+
+            step.sections.forEach((section, sectionIndex) => { 
+                const sectionWrapper = document.createElement('div');
+                
+                const button = document.createElement('button');
+                const titleClass = 'game-' + section.title.toLowerCase().replace(/\s+/g, '-');
+                button.className = `accordion-button ${titleClass}`;
+                button.innerHTML = `${section.title} <span class="transform transition-transform">▼</span>`;
+
+                const content = document.createElement('div');
+                content.className = 'accordion-content';
+
+                const grid = document.createElement('div');
+                grid.className = 'grid grid-cols-2 gap-2';
+                
+                section.options.forEach(opt => {
+                    const label = document.createElement('label');
+                    label.className = 'checkbox-label bg-gray-700 p-2 rounded flex items-center text-left min-h-[40px] gap-2';
+                    
+                    const input = document.createElement('input');
+                    input.type = 'checkbox';
+                    const zhSectionTitle = translations['zh'].tree[stepKey].sections[sectionIndex].title;
+                    input.dataset.section = zhSectionTitle; 
+                    input.value = opt;
+                    
+                    const checkmark = document.createElement('span');
+                    checkmark.className = 'checkmark';
+
+                    const textNode = document.createTextNode(opt);
+                    
+                    label.appendChild(input);
+                    label.appendChild(checkmark);
+                    label.appendChild(textNode);
+                    grid.appendChild(label);
+                });
+
+                content.appendChild(grid);
+                
+                button.addEventListener('click', () => {
+                    const isHidden = content.style.display === 'none' || content.style.display === '';
+                    content.style.display = isHidden ? 'block' : 'none';
+                    button.querySelector('span').style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+                });
+
+                sectionWrapper.appendChild(button);
+                sectionWrapper.appendChild(content);
+                accordionContainer.appendChild(sectionWrapper);
+            });
+
+            optionsContainer.appendChild(accordionContainer);
+            
+            const nextButton = document.createElement('button');
+            nextButton.textContent = currentLanguage === 'zh' ? '下一步' : 'Next';
+            nextButton.className = 'cyber-button w-full p-3 rounded-md mt-4';
+            nextButton.onclick = () => {
+                const selections = {};
+                optionsContainer.querySelectorAll('input[type="checkbox"]:checked').forEach(input => {
+                    const section = input.dataset.section;
+                    if (!selections[section]) {
+                        selections[section] = [];
+                    }
+                    selections[section].push(input.value);
+                });
+                
+                if(step.title.includes('遊戲')) {
+                    selectedGames = selections;
+                } else {
+                    selectedSegments = selections;
+                }
+                
+                historyStack.push(stepKey);
+                diagnosticPath.push(step.title); 
+                diagnosticPathZh.push(translations['zh'].tree[stepKey].title);
+                renderStep(nextOverride || step.next);
+            };
+            optionsContainer.appendChild(nextButton);
+
+        } else {
+            const containerClass = step.options.length > 2 ? 'grid grid-cols-1 md:grid-cols-2 gap-4' : 'grid grid-cols-1 gap-4';
+            optionsContainer.className = containerClass;
+
+            step.options.forEach(option => {
+                const button = document.createElement('button');
+                button.textContent = option.text;
+                button.className = 'cyber-button w-full p-4 rounded-md text-left';
+                button.onclick = () => {
+                    historyStack.push(stepKey);
+                    
+                    const zhStep = translations['zh'].tree[stepKey];
+                    const zhOption = zhStep.options.find(opt => opt.next === option.next);
+                    diagnosticPathZh.push(zhOption ? zhOption.text : option.text);
+
+                    if (option.final_next) {
+                        renderStep(option.next, option.final_next);
+                    } else {
+                        renderStep(option.next);
+                    }
+                };
+                optionsContainer.appendChild(button);
+            });
+        }
+    }
+    
+    function resetToStart() {
+        challengerNameInput.value = localStorage.getItem('challengerName') || '';
+        machineSnInput.value = localStorage.getItem('machineSN') || '';
+        diagnosticPath = [];
+        diagnosticPathZh = [];
+        selectedGames = {};
+        selectedSegments = {};
+        reportForm.reset(); 
+        updateFileList(); 
+        submitReportButton.disabled = false;
+        submitReportButton.textContent = translations[currentLanguage].submitReportButton;
+        showScreen(startScreen);
+    }
+    
+    function handleBack() {
+        if (historyStack.length > 0) {
+            diagnosticPathZh.pop();
+            const previousStepKey = historyStack.pop();
+            renderStep(previousStepKey);
+        }
+    }
+    
+    function updateFileList() {
+        const fileCountText = document.getElementById('file-count-text');
+        fileListDisplay.innerHTML = '';
+        const files = fileUploadInput.files;
+        const t = translations[currentLanguage];
+
+        if (files.length > 0) {
+            fileCountText.textContent = t.fileCountText.replace('{count}', files.length);
+            const title = document.createElement('p');
+            title.textContent = t.filesSelected.replace('{count}', files.length);
+            title.className = "font-semibold mb-1";
+            fileListDisplay.appendChild(title);
+            const list = document.createElement('ul');
+            list.className = 'list-disc list-inside';
+            for (let i = 0; i < files.length; i++) {
+                const listItem = document.createElement('li');
+                listItem.textContent = files[i].name;
+                listItem.className = "truncate";
+                list.appendChild(listItem);
+            }
+            fileListDisplay.appendChild(list);
+        } else {
+            fileCountText.textContent = t.noFileSelected;
+            fileListDisplay.innerHTML = '';
+        }
+    }
+    
+    function formatSelectionsForSheet(selections) {
+        if (Object.keys(selections).length === 0) {
+            return ''; 
+        }
+        return Object.entries(selections).map(([key, values]) => {
+            const cleanKey = key.split('(')[0].trim();
+            const valueString = values.join(', ');
+            return `${cleanKey} : ${valueString}`;
+        }).join('\n');
+    }
+
+    langZhButton.addEventListener('click', () => setLanguage('zh'));
+    langEnButton.addEventListener('click', () => setLanguage('en'));
+    startButton.addEventListener('click', startGame);
+    backButton.addEventListener('click', handleBack);
+    resetButton.addEventListener('click', resetToStart);
+    backToStartButton.addEventListener('click', resetToStart);
+    fileUploadInput.addEventListener('change', updateFileList);
+    
+    reportForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const t = translations[currentLanguage];
+        const description = document.getElementById('description').value;
+        const files = fileUploadInput.files;
+        
+        if(!description) {
+            const descInput = document.getElementById('description');
+            descInput.classList.add('invalid');
+            setTimeout(() => descInput.classList.remove('invalid'), 500);
+            return;
+        }
+        if (!SCRIPT_URL) {
+            console.error("SCRIPT_URL is not set.");
+            return;
+        }
+        submitReportButton.disabled = true;
+        submitReportButton.textContent = t.submittingReportButton;
+
+        const formData = {
+            timestamp: new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' }),
+            challengerName: localStorage.getItem('challengerName'),
+            machineSN: localStorage.getItem('machineSN'),
+            fileID: localStorage.getItem('fileID'),
+            description: description,
+            diagnosticPath: diagnosticPathZh.join('\n-> '), 
+            selectedGames: formatSelectionsForSheet(selectedGames),
+            selectedSegments: formatSelectionsForSheet(selectedSegments),
+            language: currentLanguage === 'zh' ? '中文' : 'English',
+        };
+        
+        let filesData = [];
+        let filesProcessed = 0;
+        if (files.length === 0) {
+            submitData(formData);
+        } else {
+            for (let i = 0; i < files.length; i++) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const file = {
+                        filename: files[i].name,
+                        mimeType: files[i].type,
+                        content: event.target.result.split(',')[1] 
+                    };
+                    filesData.push(file);
+                    filesProcessed++;
+                    if (filesProcessed === files.length) {
+                        formData.files = filesData;
+                        submitData(formData);
+                    }
+                };
+                reader.onerror = (error) => {
+                    console.error('Error reading file:', error);
+                    solutionTitle.textContent = t.reportErrorTitle;
+                    solutionText.textContent = t.reportErrorText + `Error reading file ${files[i].name}.`;
+                    submitReportButton.disabled = false;
+                    submitReportButton.textContent = t.submitReportButton;
+                };
+                reader.readAsDataURL(files[i]);
+            }
+        }
+    });
+
+    function submitData(formData) {
+        const t = translations[currentLanguage];
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify(formData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => { 
+                    try {
+                        const errorData = JSON.parse(text);
+                        throw new Error(errorData.message || `Server responded with status: ${response.status}`);
+                    } catch (e) {
+                        throw new Error(`Server responded with status: ${response.status} and non-JSON body: ${text}`);
+                    }
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.status === 'success') {
+                solutionTitle.textContent = t.reportSentTitle;
+                solutionText.textContent = t.reportSentText;
+                reportForm.style.display = 'none';
+            } else {
+                throw new Error(data.message || 'An unknown error occurred on the server.');
+            }
+        })
+        .catch(error => {
+            console.error('Fetch Error:', error);
+            // This specific error is a known side-effect of Google Apps Script's CORS redirect on a successful POST.
+            // We can treat this specific error as a success for a better UX.
+            if (error.toString().includes("Failed to fetch")) {
+                 console.log("Fetch failed, likely due to a CORS redirect after a successful submission. Assuming success.");
+                 solutionTitle.textContent = t.reportSentTitle;
+                 solutionText.textContent = t.reportSentText;
+                 reportForm.style.display = 'none';
+            } else {
+                solutionTitle.textContent = t.reportErrorTitle;
+                solutionText.textContent = t.reportErrorText + error.toString();
+                submitReportButton.disabled = false;
+                submitReportButton.textContent = t.submitReportButton;
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const getUrlParameter = (name) => {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            let urlToSearch = '';
+            try {
+                // Try to access the parent window's URL, which might be blocked
+                urlToSearch = window.parent.location.search;
+            } catch (e) {
+                // If blocked, fall back to the iframe's own URL as a last resort
+                console.warn("Could not access parent URL due to cross-origin restrictions. Falling back to iframe URL.");
+                urlToSearch = window.location.search;
+            }
+            const results = regex.exec(urlToSearch);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        };
+
+        const fileId = getUrlParameter('file');
+        if (fileId) {
+            fileIdInput.value = fileId;
+        }
+
+        setLanguage('zh');
+        updateFileList();
+    });
+
+</script>
 </body>
 </html>
-
-
 
