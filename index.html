@@ -633,6 +633,8 @@
     document.addEventListener('DOMContentLoaded', () => {
         setLanguage('zh');
         updateFileList();
+
+        paramValueInput.readOnly = true;
          // 1. 解析網址參數
             const urlParams = new URLSearchParams(window.location.search);            
             // 2. 取得名為 "sn" 的參數值
@@ -655,7 +657,7 @@
                 // 5. 將欄位設為唯讀並改變樣式，防止使用者修改
                 //paramNameInput.readOnly = true;
                 //paramNameInput.classList.add('bg-gray-100', 'cursor-not-allowed');
-                paramValueInput.readOnly = true;
+                
                 paramValueInput.classList.add('bg-gray-100', 'cursor-not-allowed');
 
                 // 6. 將焦點移至基礎網址輸入框，引導使用者
@@ -669,6 +671,7 @@
 </script>
 </body>
 </html>
+
 
 
 
