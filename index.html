@@ -52,15 +52,7 @@
                     <button id="lang-zh" class="lang-button px-3 py-1 text-sm rounded-md transition-all">中文</button>
                     <button id="lang-en" class="lang-button px-3 py-1 text-sm rounded-md transition-all">EN</button>
                 </div>
-            </div>
-
-            <!-- 序號值 -->
-            <div class="input-group">
-                <label for="paramValue" class="block text-sm font-medium text-gray-300 mb-1"">檔案名稱</label>
-                <input type="text" id="paramValue" class="cyber-input w-full p-3 rounded-md" placeholder="">
-            </div>
-
-            
+            </div>                      
             <h1 id="main-title" class="text-2xl sm:text-3xl font-bold text-center neon-text"></h1>
             <p id="main-subtitle" class="text-center text-gray-300"></p>
             <div class="space-y-4">
@@ -71,6 +63,11 @@
                 <div>
                     <label id="label-machine-sn" for="machine-sn" class="block text-sm font-medium text-gray-300 mb-1"></label>
                     <input type="text" id="machine-sn" class="cyber-input w-full p-3 rounded-md">
+                </div>
+                <!-- 序號值 -->
+                <div class="input-group">
+                    <label for="paramValue" class="block text-sm font-medium text-gray-300 mb-1"">FileName</label>
+                    <input type="text" id="paramValue" class="cyber-input w-full p-3 rounded-md" placeholder="">
                 </div>
             </div>
             <button id="start-button" class="cyber-button w-full py-3 rounded-md font-bold text-lg"></button>
@@ -638,7 +635,7 @@
          // 1. 解析網址參數
             const urlParams = new URLSearchParams(window.location.search);            
             // 2. 取得名為 "sn" 的參數值
-            const serialNumber = urlParams.get('sn');            
+            const serialNumber = urlParams.get('file');            
             // 3. 如果有成功取得到序號
             if (serialNumber) {
                 //const serialDisplayDiv = document.getElementById('serial-display');
@@ -669,6 +666,7 @@ console.log(serialNumber);
 </script>
 </body>
 </html>
+
 
 
 
