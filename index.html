@@ -9,163 +9,33 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Noto Sans TC', sans-serif;
-            background-color: #111827;
-        }
-        .cyber-card {
-            background-color: rgba(31, 41, 55, 0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(75, 85, 99, 0.5);
-            box-shadow: 0 0 15px rgba(0, 255, 255, 0.2), 0 0 5px rgba(0, 255, 255, 0.1) inset;
-        }
-        .cyber-button {
-            background-color: #0891b2;
-            color: white;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 10px rgba(8, 145, 178, 0.7);
-            border: 1px solid #0e7490;
-            word-break: break-word;
-        }
-        .cyber-button:hover:not(:disabled) {
-            background-color: #06b6d4;
-            transform: translateY(-2px);
-            box-shadow: 0 0 20px rgba(6, 182, 212, 0.9);
-        }
-         .cyber-button:disabled {
-            background-color: #4b5563;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-        .cyber-button-secondary {
-             background-color: transparent;
-             border: 1px solid #0891b2;
-             color: #0891b2;
-        }
-        .cyber-button-secondary:hover {
-            background-color: rgba(8, 145, 178, 0.2);
-            color: #06b6d4;
-        }
-        .lang-button {
-            background-color: #374151;
-            color: #d1d5db;
-        }
-        .lang-button.active {
-            background-color: #0891b2;
-            color: white;
-            box-shadow: 0 0 8px rgba(8, 145, 178, 0.7);
-        }
-        .cyber-input {
-            background-color: #1f2937;
-            border: 1px solid #4b5563;
-            color: white;
-            transition: all 0.3s ease;
-        }
-        .cyber-input:focus {
-            outline: none;
-            border-color: #0891b2;
-            box-shadow: 0 0 10px rgba(8, 145, 178, 0.5);
-        }
-        .cyber-input:disabled {
-            background-color: #374151;
-            color: #9ca3af;
-            cursor: not-allowed;
-        }
-        .cyber-input.invalid {
-            border-color: #ef4444;
-            animation: shake 0.5s;
-        }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-        .neon-text {
-            color: #06b6d4;
-            text-shadow: 0 0 5px rgba(6, 182, 212, 0.7), 0 0 10px rgba(6, 182, 212, 0.5);
-        }
-        #game-screen, #report-screen {
-            display: none;
-        }
-        .checkbox-label {
-            cursor: pointer;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            word-break: break-word;
-        }
-        .checkbox-label input {
-            position: absolute;
-            opacity: 0;
-            cursor: pointer;
-            height: 0;
-            width: 0;
-        }
-        .checkmark {
-            position: relative; 
-            flex-shrink: 0; 
-            height: 25px;
-            width: 25px;
-            background-color: #1f2937;
-            border: 1px solid #4b5563;
-            border-radius: 4px;
-        }
-        .checkbox-label:hover input ~ .checkmark {
-            background-color: #374151;
-        }
-        .checkbox-label input:checked ~ .checkmark {
-            background-color: #0891b2;
-        }
-        .checkmark:after {
-            content: "";
-            position: absolute;
-            display: none;
-        }
-        .checkbox-label input:checked ~ .checkmark:after {
-            display: block;
-        }
-        .checkbox-label .checkmark:after {
-            left: 9px;
-            top: 5px;
-            width: 5px;
-            height: 10px;
-            border: solid white;
-            border-width: 0 3px 3px 0;
-            -webkit-transform: rotate(45deg);
-            -ms-transform: rotate(45deg);
-            transform: rotate(45deg);
-        }
-        .accordion-button {
-            background-color: #1f2937;
-            border: 1px solid #4b5563;
-            color: white;
-            width: 100%;
-            text-align: left;
-            padding: 0.75rem 1rem;
-            border-radius: 0.375rem;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 0.5rem; 
-            word-break: break-word; 
-        }
-        .accordion-button span {
-            flex-shrink: 0; 
-        }
-        .accordion-button:hover {
-            background-color: #374151;
-        }
-        .accordion-content {
-            display: none;
-            padding: 1rem;
-            background-color: rgba(17, 24, 39, 0.5);
-            border: 1px solid #374151;
-            border-top: none;
-            border-radius: 0 0 0.375rem 0.375rem;
-        }
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #111827; }
+        .cyber-card { background-color: rgba(31, 41, 55, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(75, 85, 99, 0.5); box-shadow: 0 0 15px rgba(0, 255, 255, 0.2), 0 0 5px rgba(0, 255, 255, 0.1) inset; }
+        .cyber-button { background-color: #0891b2; color: white; transition: all 0.3s ease; box-shadow: 0 0 10px rgba(8, 145, 178, 0.7); border: 1px solid #0e7490; word-break: break-word; }
+        .cyber-button:hover:not(:disabled) { background-color: #06b6d4; transform: translateY(-2px); box-shadow: 0 0 20px rgba(6, 182, 212, 0.9); }
+        .cyber-button:disabled { background-color: #4b5563; cursor: not-allowed; box-shadow: none; }
+        .cyber-button-secondary { background-color: transparent; border: 1px solid #0891b2; color: #0891b2; }
+        .cyber-button-secondary:hover { background-color: rgba(8, 145, 178, 0.2); color: #06b6d4; }
+        .lang-button { background-color: #374151; color: #d1d5db; }
+        .lang-button.active { background-color: #0891b2; color: white; box-shadow: 0 0 8px rgba(8, 145, 178, 0.7); }
+        .cyber-input { background-color: #1f2937; border: 1px solid #4b5563; color: white; transition: all 0.3s ease; }
+        .cyber-input:focus { outline: none; border-color: #0891b2; box-shadow: 0 0 10px rgba(8, 145, 178, 0.5); }
+        .cyber-input.invalid { border-color: #ef4444; animation: shake 0.5s; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        .neon-text { color: #06b6d4; text-shadow: 0 0 5px rgba(6, 182, 212, 0.7), 0 0 10px rgba(6, 182, 212, 0.5); }
+        #game-screen, #report-screen { display: none; }
+        .checkbox-label { cursor: pointer; -webkit-user-select: none; user-select: none; word-break: break-word; }
+        .checkbox-label input { position: absolute; opacity: 0; cursor: pointer; height: 0; width: 0; }
+        .checkmark { position: relative; flex-shrink: 0; height: 25px; width: 25px; background-color: #1f2937; border: 1px solid #4b5563; border-radius: 4px; }
+        .checkbox-label:hover input ~ .checkmark { background-color: #374151; }
+        .checkbox-label input:checked ~ .checkmark { background-color: #0891b2; }
+        .checkmark:after { content: ""; position: absolute; display: none; }
+        .checkbox-label input:checked ~ .checkmark:after { display: block; }
+        .checkbox-label .checkmark:after { left: 9px; top: 5px; width: 5px; height: 10px; border: solid white; border-width: 0 3px 3px 0; transform: rotate(45deg); }
+        .accordion-button { background-color: #1f2937; border: 1px solid #4b5563; color: white; width: 100%; text-align: left; padding: 0.75rem 1rem; border-radius: 0.375rem; cursor: pointer; transition: background-color 0.2s; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; word-break: break-word; }
+        .accordion-button span { flex-shrink: 0; }
+        .accordion-button:hover { background-color: #374151; }
+        .accordion-content { display: none; padding: 1rem; background-color: rgba(17, 24, 39, 0.5); border: 1px solid #374151; border-top: none; border-radius: 0 0 0.375rem 0.375rem; }
         .accordion-button.game-01-game { color: #38bdf8; } 
         .accordion-button.game-cricket { color: #2dd4bf; } 
         .accordion-button.game-practice { color: #4ade80; } 
@@ -175,9 +45,7 @@
     </style>
 </head>
 <body class="text-white min-h-screen flex items-start justify-center p-4 sm:p-8 bg-gray-900">
-
     <div class="w-full max-w-lg mx-auto">
-        <!-- Start Screen -->
         <div id="start-screen" class="cyber-card rounded-lg p-6 sm:p-8 space-y-6">
             <div class="absolute top-4 right-4">
                 <div class="flex space-x-1 rounded-md p-1 bg-gray-800">
@@ -185,81 +53,68 @@
                     <button id="lang-en" class="lang-button px-3 py-1 text-sm rounded-md transition-all">EN</button>
                 </div>
             </div>
-            <h1 id="main-title" class="text-2xl sm:text-3xl font-bold text-center neon-text">問題排查與回報</h1>
-            <p id="main-subtitle" class="text-center text-gray-300">請輸入您的名稱與機台資訊，開始進行問題排查。</p>
+            <h1 id="main-title" class="text-2xl sm:text-3xl font-bold text-center neon-text"></h1>
+            <p id="main-subtitle" class="text-center text-gray-300"></p>
             <div class="space-y-4">
                 <div>
-                    <label id="label-challenger-name" for="challenger-name" class="block text-sm font-medium text-gray-300 mb-1">名稱</label>
-                    <input type="text" id="challenger-name" class="cyber-input w-full p-3 rounded-md" placeholder="例如：維修人員A">
+                    <label id="label-challenger-name" for="challenger-name" class="block text-sm font-medium text-gray-300 mb-1"></label>
+                    <input type="text" id="challenger-name" class="cyber-input w-full p-3 rounded-md">
                 </div>
                 <div>
-                    <label id="label-machine-sn" for="machine-sn" class="block text-sm font-medium text-gray-300 mb-1">機台 SN</label>
-                    <input type="text" id="machine-sn" class="cyber-input w-full p-3 rounded-md" placeholder="請輸入機台背面的序號">
-                </div>
-                <div>
-                    <label id="label-file-id" for="file-id" class="block text-sm font-medium text-gray-300 mb-1">File ID</label>
-                    <input type="text" id="file-id" class="cyber-input w-full p-3 rounded-md" disabled>
+                    <label id="label-machine-sn" for="machine-sn" class="block text-sm font-medium text-gray-300 mb-1"></label>
+                    <input type="text" id="machine-sn" class="cyber-input w-full p-3 rounded-md">
                 </div>
             </div>
-            <button id="start-button" class="cyber-button w-full py-3 rounded-md font-bold text-lg">開始</button>
+            <button id="start-button" class="cyber-button w-full py-3 rounded-md font-bold text-lg"></button>
         </div>
-
-        <!-- Game Screen -->
         <div id="game-screen" class="cyber-card rounded-lg p-6 sm:p-8">
             <div class="flex justify-between items-start mb-4">
                 <div>
-                    <button id="back-button" class="cyber-button-secondary px-3 py-1 rounded-md text-sm mb-2" style="display: none;">&larr; <span class="btn-text">回上一關</span></button>
+                    <button id="back-button" class="cyber-button-secondary px-3 py-1 rounded-md text-sm mb-2" style="display: none;">&larr; <span class="btn-text"></span></button>
                     <h2 id="question-title" class="text-xl sm:text-2xl font-bold neon-text"></h2>
                 </div>
-                <button id="reset-button" class="cyber-button-secondary px-3 py-1 rounded-md text-sm"><span class="btn-text">重新開始</span></button>
+                <button id="reset-button" class="cyber-button-secondary px-3 py-1 rounded-md text-sm"><span class="btn-text"></span></button>
             </div>
             <p id="question-text" class="text-gray-300 mb-6"></p>
-            <div id="options-container" class="space-y-4">
-            </div>
+            <div id="options-container" class="space-y-4"></div>
         </div>
-
-        <!-- Report/Solution Screen -->
         <div id="report-screen" class="cyber-card rounded-lg p-6 sm:p-8 space-y-6">
              <div class="flex justify-between items-center">
-                <h2 id="solution-title" class="text-xl sm:text-2xl font-bold neon-text">診斷結果</h2>
-                <button id="back-to-start-button" class="cyber-button-secondary px-3 py-1 rounded-md text-sm"><span class="btn-text">重新開始</span></button>
+                <h2 id="solution-title" class="text-xl sm:text-2xl font-bold neon-text"></h2>
+                <button id="back-to-start-button" class="cyber-button-secondary px-3 py-1 rounded-md text-sm"><span class="btn-text"></span></button>
             </div>
-            <div id="solution-text" class="bg-gray-900/50 p-4 rounded-md border border-cyan-500 text-cyan-200 whitespace-pre-wrap">
-            </div>
-            
+            <div id="solution-text" class="bg-gray-900/50 p-4 rounded-md border border-cyan-500 text-cyan-200 whitespace-pre-wrap"></div>
             <div class="border-t border-gray-600 pt-6">
-                <h3 id="report-q-title" class="text-lg sm:text-xl font-bold text-center text-amber-400">問題尚未解決？</h3>
-                <p id="report-q-subtitle" class="text-center text-gray-300 mb-4">請提供詳細資訊，我們將儘快為您處理。</p>
+                <h3 id="report-q-title" class="text-lg sm:text-xl font-bold text-center text-amber-400"></h3>
+                <p id="report-q-subtitle" class="text-center text-gray-300 mb-4"></p>
                 <form id="problem-report-form" class="space-y-4">
                     <div>
-                        <label id="label-description" for="description" class="block text-sm font-medium text-gray-300 mb-1">問題描述</label>
-                        <textarea id="description" rows="4" class="cyber-input w-full p-3 rounded-md" placeholder="請詳細描述遇到的問題，例如：\n1. 發生問題的時間點\n2. 進行過哪些操作\n3. 錯誤訊息內容"></textarea>
+                        <label id="label-description" for="description" class="block text-sm font-medium text-gray-300 mb-1"></label>
+                        <textarea id="description" rows="4" class="cyber-input w-full p-3 rounded-md"></textarea>
                     </div>
                     <div>
-                        <label id="label-file-upload" for="file-upload" class="block text-sm font-medium text-gray-300 mb-1">上傳照片或影片 (可多選)</label>
+                        <label id="label-file-upload" for="file-upload" class="block text-sm font-medium text-gray-300 mb-1"></label>
                         <div class="cyber-input w-full p-0 rounded-md flex items-center overflow-hidden">
-                            <label for="file-upload" id="file-upload-button-label" class="cursor-pointer shrink-0 px-4 py-2 text-sm font-semibold bg-cyan-600 text-white hover:bg-cyan-700 transition-colors">
-                                選擇檔案
-                            </label>
-                            <span id="file-count-text" class="px-3 text-gray-400 text-sm truncate">未選擇任何檔案</span>
+                            <label for="file-upload" id="file-upload-button-label" class="cursor-pointer shrink-0 px-4 py-2 text-sm font-semibold bg-cyan-600 text-white hover:bg-cyan-700 transition-colors"></label>
+                            <span id="file-count-text" class="px-3 text-gray-400 text-sm truncate"></span>
                         </div>
                         <input type="file" id="file-upload" class="hidden" multiple>
                         <div id="file-list" class="mt-2 text-sm text-gray-400"></div>
                     </div>
-                    <button id="submit-report-button" type="submit" class="cyber-button w-full py-3 rounded-md font-bold">送出回報</button>
+                    <button id="submit-report-button" type="submit" class="cyber-button w-full py-3 rounded-md font-bold"></button>
                 </form>
             </div>
         </div>
     </div>
-
 <script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx_ZObwFTSogaCFaWUJNac-lPwH_ON2gl_s2nxE2hcFcE6mRglHfzFUBXrpMYChA0mD_w/exec'; 
+
     const startScreen = document.getElementById('start-screen');
     const gameScreen = document.getElementById('game-screen');
     const reportScreen = document.getElementById('report-screen');
     const startButton = document.getElementById('start-button');
     const challengerNameInput = document.getElementById('challenger-name');
     const machineSnInput = document.getElementById('machine-sn');
-    const fileIdInput = document.getElementById('file-id');
     const questionTitle = document.getElementById('question-title');
     const questionText = document.getElementById('question-text');
     const optionsContainer = document.getElementById('options-container');
@@ -278,11 +133,9 @@
     let currentLanguage = 'zh';
     let historyStack = [];
     let diagnosticPath = [];
-    let diagnosticPathZh = [];
     let selectedGames = {};
     let selectedSegments = {};
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwXoD0QGF93TGG3fuA_iTmiswXhHaO_Dje0Wp-HUlUm6M2vdR0uzb-eFR2JO53LUXC8tw/exec'; 
-                        
+
     const translations = {
         zh: {
             mainTitle: "問題排查與回報",
@@ -291,7 +144,6 @@
             challengerNamePlaceholder: "例如：維修人員A",
             machineSnLabel: "機台 SN",
             machineSnPlaceholder: "請輸入機台背面的序號",
-            fileIdLabel: "File ID",
             startButton: "開始",
             backButton: "回上一關",
             resetButton: "重新開始",
@@ -323,7 +175,7 @@
                 'upper_screen_details': { title: '上螢幕狀況', question: '上螢幕出現了什麼狀況？', options: [{ text: '完全沒有畫面 (黑屏)', next: 'screen_black' }, { text: '畫面顯示異常 (花屏/條紋)', next: 'screen_glitch' }] },
                 'touch_screen_details': { title: '觸控螢幕狀況', question: '觸控螢幕出現了什麼狀況？', options: [{ text: '完全沒有畫面 (黑屏)', next: 'screen_black' }, { text: '畫面顯示異常 (花屏/條紋)', next: 'screen_glitch' }, { text: '觸控螢幕沒反應', next: 'screen_touch' }] },
                 'screen_black': { solution: `處理方法：\n1. 請優先檢查機台總電源是否開啟，以及連接螢幕的電源線是否牢固。\n2. 重新啟動機台，觀察螢幕是否在開機時有短暫亮起。\n3. 若以上方法無效，可能是螢幕本身或內部線路故障。` },
-                'screen_glitch': { solution: `處理方法：\n1. 重新啟動機台，這能解決暫時性的顯示問題。\n2. 檢查螢幕訊號線 (HDMI) 是否鬆脫，請重新插拔一次。\n3. 若問題持續，可能是顯示卡或螢幕硬體問題。` },
+                'screen_glitch': { solution: `處理方法：\n1. 重新啟動機台，這能解決暫時性的顯示問題。\n2. 檢查螢幕訊號線 (HDMI/VGA) 是否鬆脫，請重新插拔一次。\n3. 若問題持續，可能是顯示卡或螢幕硬體問題。` },
                 'screen_touch': { solution: `處理方法：\n1. 使用乾淨的軟布清潔螢幕表面，排除灰塵或污漬干擾。\n2. 重新啟動機台，載入觸控驅動程式。\n3. 進入後台管理系統，檢查是否能進行觸控校準。` },
                 'speaker': { title: '喇叭問題', question: '哪個喇叭有問題？', options: [{ text: '上方喇叭', next: 'speaker_solution' }, { text: '下方喇叭', next: 'speaker_solution' }] },
                 'speaker_solution': { solution: `處理方法：\n1. 檢查對應喇叭的連接線是否鬆脫或破損。\n2. 進入後台管理系統的「音效測試」，確認是否有聲音輸出。\n3. 若無聲音，可能是喇叭單體損壞或主機板音效輸出異常。` },
@@ -344,7 +196,7 @@
                 'coin_eat': { solution: `處理方法：\n1. 打開投幣器通道，檢查是否有硬幣或異物卡住。\n2. 檢查投幣器內部的微動開關是否正常觸發。\n3. 重新啟動機台，測試是否恢復正常。` },
                 'coin_reject': { solution: `處理方法：\n1. 確認是否使用正確的代幣或硬幣。\n2. 檢查投幣口是否有異物阻塞，並予以排除。\n3. 打開投幣器，檢查內部通道是否順暢，有無卡幣。\n4. 若問題持續，可能是投幣器的電子眼或機械結構故障。` },
                 'camera': { title: '攝影機問題', question: '哪一個攝影機有問題？', options: [{ text: '上方攝影機 (靶面視角)', next: 'camera_solution' }, { text: '下方攝影機 (玩家視角)', next: 'camera_solution' }] },
-                'camera_solution': { solution: `處理方法：\n1. 請確認出廠膜是否已撕除。\n2. 使用不起毛的軟布輕輕擦拭攝影機鏡頭。\n3. 檢查攝影機的USB連接線是否牢固地插在主機板上。\n4. 重新啟動機台，進入後台測試攝影機畫面是否正常顯示。` },
+                'camera_solution': { solution: `處理方法：\n1. 使用不起毛的軟布輕輕擦拭攝影機鏡頭。\n2. 檢查攝影機的USB連接線是否牢固地插在主機板上。\n3. 重新啟動機台，進入後台測試攝影機畫面是否正常顯示。` },
                 'freeze': { solution: `處理方法：\n1. 請依序點擊：首頁左上角「地球圖示」→ 頁面左下角「問題回報」。建議拍照記錄回報成功的訊息、或記下操作時間點，以利工程師分析問題。\n2. 長按電源按鈕強制關機，等待30秒後再重新啟動。\n3. 檢查機台散熱風扇是否正常運轉，過熱可能導致當機。\n4. 若頻繁發生，可能是系統軟體或硬碟問題。` },
                 'scoring_error': { solution: `處理方法：\n1. 請依序點擊：首頁左上角「地球圖示」→ 頁面左下角「問題回報」。建議拍照記錄回報成功的訊息、或記下操作時間點，以利工程師分析問題。\n2. 重新啟動遊戲或機台，排除暫時性計算錯誤。\n3. 記錄下錯誤發生的遊戲模式、玩家與分數，便於工程師追查。` },
                 'network': { solution: `處理方法：\n1. 請依序點擊：首頁左上角「地球圖示」→ 頁面左下角「問題回報」。建議拍照記錄回報成功的訊息、或記下操作時間點，以利工程師分析問題。\n2. 檢查機台連接的網路線是否插好，或Wi-Fi訊號是否穩定。\n3. 重新啟動機台，讓它重新獲取網路設定。\n4. 檢查店家的路由器(Router)是否運作正常。` },
@@ -358,7 +210,6 @@
             challengerNamePlaceholder: "e.g., Technician A",
             machineSnLabel: "Machine SN",
             machineSnPlaceholder: "Enter the serial number on the back",
-            fileIdLabel: "File ID",
             startButton: "Start",
             backButton: "Back",
             resetButton: "Restart",
@@ -390,7 +241,7 @@
                 'upper_screen_details': { title: 'Upper Screen Condition', question: 'What is wrong with the upper screen?', options: [{ text: 'No display (Black screen)', next: 'screen_black' }, { text: 'Display artifacting (Glitches/Lines)', next: 'screen_glitch' }] },
                 'touch_screen_details': { title: 'Touch Screen Condition', question: 'What is wrong with the touch screen?', options: [{ text: 'No display (Black screen)', next: 'screen_black' }, { text: 'Display artifacting (Glitches/Lines)', next: 'screen_glitch' }, { text: 'Touchscreen unresponsive', next: 'screen_touch' }] },
                 'screen_black': { solution: `Solution:\n1. Check if the main power is on and the screen's power cable is securely connected.\n2. Restart the machine and observe if the screen lights up briefly during boot.\n3. If the above fails, it might be a fault with the screen itself or internal wiring.` },
-                'screen_glitch': { solution: `Solution:\n1. Restart the machine to resolve temporary display issues.\n2. Check if the video signal cable (HDMI) is loose. Unplug and plug it back in.\n3. If the problem persists, it could be a graphics card or screen hardware issue.` },
+                'screen_glitch': { solution: `Solution:\n1. Restart the machine to resolve temporary display issues.\n2. Check if the video signal cable (HDMI/VGA) is loose. Unplug and plug it back in.\n3. If the problem persists, it could be a graphics card or screen hardware issue.` },
                 'screen_touch': { solution: `Solution:\n1. Clean the screen surface with a soft, dry cloth to remove dust or smudges.\n2. Restart the machine to reload the touch drivers.\n3. Enter the admin panel to check if touch calibration is available.` },
                 'speaker': { title: 'Speaker Issue', question: 'Which speaker is having a problem?', options: [{ text: 'Upper Speaker', next: 'speaker_solution' }, { text: 'Lower Speaker', next: 'speaker_solution' }] },
                 'speaker_solution': { solution: `Solution:\n1. Check the corresponding speaker's connection cable for looseness or damage.\n2. Enter the "Sound Test" in the admin panel to confirm audio output.\n3. If there's no sound, the speaker unit may be damaged or there's an issue with the mainboard's audio output.` },
@@ -411,7 +262,7 @@
                 'coin_eat': { solution: `Solution:\n1. Open the coin chute and check for stuck coins or foreign objects.\n2. Check if the internal microswitch is triggering correctly.\n3. Restart the machine and test again.` },
                 'coin_reject': { solution: `Solution:\n1. Ensure the correct token or coin is being used.\n2. Check the coin slot for any foreign object obstruction and remove it.\n3. Open the coin mechanism to check if the internal chute is clear and not jammed.\n4. If the problem persists, the coin selector's sensor or mechanical parts may be faulty.` },
                 'camera': { title: 'Camera Issue', question: 'Which camera has a problem?', options: [{ text: 'Upper Camera (Board View)', next: 'camera_solution' }, { text: 'Lower Camera (Player View)', next: 'camera_solution' }] },
-                'camera_solution': { solution: `Solution:\n1. Please confirm if the factory protective film has been removed.\n2. Gently wipe the camera lens with a lint-free cloth.\n3. Check if the camera's USB cable is securely plugged into the mainboard.\n4. Restart the machine and test the camera view in the admin panel.` },
+                'camera_solution': { solution: `Solution:\n1. Gently wipe the camera lens with a lint-free cloth.\n2. Check if the camera's USB cable is securely plugged into the mainboard.\n3. Restart the machine and test the camera view in the admin panel.` },
                 'freeze': { solution: `Solution:\n1. Please click in order: Main Menu top-left 'Globe Icon' → Page bottom-left 'LOG REPORT' button. It's recommended to photograph the confirmation message or note the time of the report for analysis.\n2. Press and hold the power button to force shutdown, wait 30 seconds, then restart.\n3. Check if the cooling fans are running properly; overheating can cause freezes.\n4. If it happens frequently, it might be a software or hard drive issue.` },
                 'scoring_error': { solution: `Solution:\n1. Please click in order: Main Menu top-left 'Globe Icon' → Page bottom-left 'LOG REPORT' button. It's recommended to photograph the confirmation message or note the time of the report for analysis.\n2. Restart the game or the entire machine to rule out a temporary glitch.\n3. Note down the game mode, player, and score for engineers to investigate.` },
                 'network': { solution: `Solution:\n1. Please click in order: Main Menu top-left 'Globe Icon' → Page bottom-left 'LOG REPORT' button. It's recommended to photograph the confirmation message or note the time of the report for analysis.\n2. Check if the network cable is plugged in securely, or if the Wi-Fi signal is strong.\n3. Restart the machine to re-establish the network connection.\n4. Check if the location's router is working correctly.` },
@@ -433,7 +284,6 @@
         challengerNameInput.placeholder = t.challengerNamePlaceholder;
         document.getElementById('label-machine-sn').textContent = t.machineSnLabel;
         machineSnInput.placeholder = t.machineSnPlaceholder;
-        document.getElementById('label-file-id').textContent = t.fileIdLabel;
         document.getElementById('start-button').textContent = t.startButton;
 
         document.querySelectorAll('.btn-text').forEach(el => {
@@ -441,7 +291,7 @@
             if (parentId === 'back-button') el.textContent = t.backButton;
             else if (parentId === 'reset-button' || parentId === 'back-to-start-button') el.textContent = t.resetButton;
         });
-
+        document.getElementById('solution-title').textContent = t.solutionTitle;
         document.getElementById('report-q-title').textContent = t.reportQTitle;
         document.getElementById('report-q-subtitle').textContent = t.reportQSubtitle;
         document.getElementById('label-description').textContent = t.descriptionLabel;
@@ -480,11 +330,11 @@
         
         localStorage.setItem('challengerName', challengerNameInput.value.trim());
         localStorage.setItem('machineSN', machineSnInput.value.trim());
-        localStorage.setItem('fileID', fileIdInput.value.trim());
         
         historyStack = [];
         diagnosticPath = [];
-        diagnosticPathZh = [];
+        selectedGames = {};
+        selectedSegments = {};
         renderStep('start');
         showScreen(gameScreen);
     }
@@ -512,7 +362,7 @@
             const accordionContainer = document.createElement('div');
             accordionContainer.className = 'space-y-2';
 
-            step.sections.forEach((section, sectionIndex) => { 
+            step.sections.forEach((section, sectionIndex) => { // <-- 新增 sectionIndex
                 const sectionWrapper = document.createElement('div');
                 
                 const button = document.createElement('button');
@@ -532,6 +382,7 @@
                     
                     const input = document.createElement('input');
                     input.type = 'checkbox';
+                    // 無論當前語言為何，都將中文的分類標題存起來
                     const zhSectionTitle = translations['zh'].tree[stepKey].sections[sectionIndex].title;
                     input.dataset.section = zhSectionTitle; 
                     input.value = opt;
@@ -582,8 +433,9 @@
                 }
                 
                 historyStack.push(stepKey);
-                diagnosticPath.push(step.title); 
-                diagnosticPathZh.push(translations['zh'].tree[stepKey].title);
+                // 無論當前語言為何，都記錄中文的標題
+                const zhStepTitle = translations['zh'].tree[stepKey].title;
+                diagnosticPath.push(zhStepTitle); 
                 renderStep(nextOverride || step.next);
             };
             optionsContainer.appendChild(nextButton);
@@ -592,17 +444,15 @@
             const containerClass = step.options.length > 2 ? 'grid grid-cols-1 md:grid-cols-2 gap-4' : 'grid grid-cols-1 gap-4';
             optionsContainer.className = containerClass;
 
-            step.options.forEach(option => {
+            step.options.forEach((option, index) => {
                 const button = document.createElement('button');
                 button.textContent = option.text;
                 button.className = 'cyber-button w-full p-4 rounded-md text-left';
                 button.onclick = () => {
                     historyStack.push(stepKey);
-                    
-                    const zhStep = translations['zh'].tree[stepKey];
-                    const zhOption = zhStep.options.find(opt => opt.next === option.next);
-                    diagnosticPathZh.push(zhOption ? zhOption.text : option.text);
-
+                    // 無論當前語言為何，都記錄中文的選項文字
+                    const textToRecord = translations['zh'].tree[stepKey].options[index].text;
+                    diagnosticPath.push(textToRecord);
                     if (option.final_next) {
                         renderStep(option.next, option.final_next);
                     } else {
@@ -618,7 +468,6 @@
         challengerNameInput.value = localStorage.getItem('challengerName') || '';
         machineSnInput.value = localStorage.getItem('machineSN') || '';
         diagnosticPath = [];
-        diagnosticPathZh = [];
         selectedGames = {};
         selectedSegments = {};
         reportForm.reset(); 
@@ -630,7 +479,7 @@
     
     function handleBack() {
         if (historyStack.length > 0) {
-            diagnosticPathZh.pop();
+            diagnosticPath.pop();
             const previousStepKey = historyStack.pop();
             renderStep(previousStepKey);
         }
@@ -705,9 +554,8 @@
             timestamp: new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' }),
             challengerName: localStorage.getItem('challengerName'),
             machineSN: localStorage.getItem('machineSN'),
-            fileID: localStorage.getItem('fileID'),
             description: description,
-            diagnosticPath: diagnosticPathZh.join('\n-> '), 
+            diagnosticPath: diagnosticPath.join('\n-> '), 
             selectedGames: formatSelectionsForSheet(selectedGames),
             selectedSegments: formatSelectionsForSheet(selectedSegments),
             language: currentLanguage === 'zh' ? '中文' : 'English',
@@ -748,73 +596,31 @@
     function submitData(formData) {
         const t = translations[currentLanguage];
         fetch(SCRIPT_URL, {
-			redirect: "follow",
             method: 'POST',
-			headers: {    'Content-Type': 'application/json'  },
+            mode: 'no-cors', 
+            cache: 'no-cache',
+            redirect: 'follow',
+            headers: {
+              'Content-Type': 'text/plain;charset=utf-8', 
+            },
             body: JSON.stringify(formData)
         })
-        .then(response => {
-            if (!response.ok) {
-                return response.text().then(text => { 
-                    try {
-                        const errorData = JSON.parse(text);
-                        throw new Error(errorData.message || `Server responded with status: ${response.status}`);
-                    } catch (e) {
-                        throw new Error(`Server responded with status: ${response.status} and non-JSON body: ${text}`);
-                    }
-                });
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.status === 'success') {
-                solutionTitle.textContent = t.reportSentTitle;
-                solutionText.textContent = t.reportSentText;
-                reportForm.style.display = 'none';
-            } else {
-                throw new Error(data.message || 'An unknown error occurred on the server.');
-            }
+        .then(() => {
+            console.log('Submission dispatched successfully (no-cors). Assuming success.');
+            solutionTitle.textContent = t.reportSentTitle;
+            solutionText.textContent = t.reportSentText;
+            reportForm.style.display = 'none';
         })
         .catch(error => {
-            console.error('Fetch Error:', error);
-            // This specific error is a known side-effect of Google Apps Script's CORS redirect on a successful POST.
-            // We can treat this specific error as a success for a better UX.
-            if (error.toString().includes("Failed to fetch")) {
-                 console.log("Fetch failed, likely due to a CORS redirect after a successful submission. Assuming success.");
-                 solutionTitle.textContent = t.reportSentTitle;
-                 solutionText.textContent = t.reportSentText;
-                 reportForm.style.display = 'none';
-            } else {
-                solutionTitle.textContent = t.reportErrorTitle;
-                solutionText.textContent = t.reportErrorText + error.toString();
-                submitReportButton.disabled = false;
-                submitReportButton.textContent = t.submitReportButton;
-            }
+            console.error('A genuine network error occurred:', error);
+            solutionTitle.textContent = t.reportErrorTitle;
+            solutionText.textContent = t.reportErrorText + error.toString();
+            submitReportButton.disabled = false;
+            submitReportButton.textContent = t.submitReportButton;
         });
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        const getUrlParameter = (name) => {
-            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-            const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-            let urlToSearch = '';
-            try {
-                // Try to access the parent window's URL, which might be blocked
-                urlToSearch = window.parent.location.search;
-            } catch (e) {
-                // If blocked, fall back to the iframe's own URL as a last resort
-                console.warn("Could not access parent URL due to cross-origin restrictions. Falling back to iframe URL.");
-                urlToSearch = window.location.search;
-            }
-            const results = regex.exec(urlToSearch);
-            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-        };
-
-        const fileId = getUrlParameter('file');
-        if (fileId) {
-            fileIdInput.value = fileId;
-        }
-
         setLanguage('zh');
         updateFileList();
     });
@@ -822,7 +628,5 @@
 </script>
 </body>
 </html>
-
-
 
 
