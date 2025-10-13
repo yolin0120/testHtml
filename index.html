@@ -140,7 +140,7 @@
     let diagnosticPath = [];
     let selectedGames = {};
     let selectedSegments = {};
-
+    let fileID = '';
     const translations = {
         zh: {
             mainTitle: "問題排查與回報",
@@ -474,7 +474,7 @@
         machineSnInput.value = localStorage.getItem('machineSN') || '';
         diagnosticPath = [];
         selectedGames = {};
-        selectedSegments = {};
+        selectedSegments = {};        
         reportForm.reset(); 
         updateFileList(); 
         submitReportButton.disabled = false;
@@ -564,6 +564,7 @@
             selectedGames: formatSelectionsForSheet(selectedGames),
             selectedSegments: formatSelectionsForSheet(selectedSegments),
             language: currentLanguage === 'zh' ? '中文' : 'English',
+            fileID: fileID,
         };
         
         let filesData = [];
@@ -666,6 +667,7 @@ console.log(serialNumber);
 </script>
 </body>
 </html>
+
 
 
 
