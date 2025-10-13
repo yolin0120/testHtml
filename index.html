@@ -748,6 +748,7 @@
     function submitData(formData) {
         const t = translations[currentLanguage];
         fetch(SCRIPT_URL, {
+			redirect: "follow",
             method: 'POST',
 			headers: {    'Content-Type': 'application/json'  },
             body: JSON.stringify(formData)
@@ -821,5 +822,6 @@
 </script>
 </body>
 </html>
+
 
 
