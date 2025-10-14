@@ -638,35 +638,19 @@
             // 2. 取得名為 "sn" 的參數值
             const serialNumber = urlParams.get('file');            
             // 3. 如果有成功取得到序號
-            if (serialNumber) {
-                //const serialDisplayDiv = document.getElementById('serial-display');
-                //const serialInputField = document.getElementById('serial-field');
-
-                // 顯示並填入序號顯示框
-                //if (serialDisplayDiv && serialInputField) {
-                //    serialInputField.value = serialNumber;
-                //    serialDisplayDiv.style.display = 'block';
-                //}
-console.log(serialNumber);
-                // 4. 將參數名稱 'sn' 和序號值預填到產生器對應的欄位
-                //paramNameInput.value = 'sn';
+            if (serialNumber) {              
+                console.log(serialNumber);
+                
+                // 4. 將參數名稱 'sn' 和序號值預填到產生器對應的欄位                
                 paramValueInput.value = serialNumber;
-
-                // 5. 將欄位設為唯讀並改變樣式，防止使用者修改
-                //paramNameInput.readOnly = true;                
-
-                // 6. 將焦點移至基礎網址輸入框，引導使用者
-                //baseUrlInput.focus();
-                //baseUrlInput.placeholder = "請在這裡輸入回報表單網址";
-
-                // 自動觸發一次產生，以顯示提示訊息 (如果 base url 為空)
-                //generate();
+                fileID = serialNumber;                
             }
     });
 
 </script>
 </body>
 </html>
+
 
 
 
