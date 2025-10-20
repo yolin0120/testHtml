@@ -141,6 +141,9 @@
     let selectedGames = {};
     let selectedSegments = {};
     let fileID = '';
+    let uid = 0;
+    let storeId = 0;
+    let dealId = 0;
     const translations = {
         zh: {
             mainTitle: "問題排查與回報",
@@ -565,6 +568,9 @@
             selectedSegments: formatSelectionsForSheet(selectedSegments),
             language: currentLanguage === 'zh' ? '中文' : 'English',
             fileID: fileID,
+            uid: uid,
+            storeId: storeId,
+            dealId: dealId,			
         };
         
         let filesData = [];
@@ -636,34 +642,47 @@
          // 1. 解析網址參數
             const urlParams = new URLSearchParams(window.location.search);            
             // 2. 取得名為 "sn" 的參數值
-            const serialNumber = urlParams.get('file');            
+            const filePath = urlParams.get('file');            
             // 3. 如果有成功取得到序號
-            if (serialNumber) {              
-                console.log(serialNumber);
+            if (filePath) {              
+                console.log(filePath);
                 
                 // 4. 將參數名稱 'sn' 和序號值預填到產生器對應的欄位                
-                paramValueInput.value = serialNumber;
-                fileID = serialNumber;                
+                paramValueInput.value = filePath;
+                fileID = filePath;                
+            }
+			
+			const uidNumber = urlParams.get('uid');            
+            // 3. 如果有成功取得到序號
+            if (uidNumber) {              
+                console.log(uidNumber);
+                
+                // 4. 將參數名稱 'sn' 和序號值預填到產生器對應的欄位                
+                paramValueInput.value = uidNumber;
+                fileID = uidNumber;                
+            }
+			
+			const storeIdNumber = urlParams.get('storeId');            
+            // 3. 如果有成功取得到序號
+            if (storeIdNumber) {              
+                console.log(storeIdNumber);
+                
+                // 4. 將參數名稱 'sn' 和序號值預填到產生器對應的欄位                
+                paramValueInput.value = storeIdNumber;
+                fileID = storeIdNumber;                
+            }
+			
+			const dealIdNumber = urlParams.get('dealId');            
+            // 3. 如果有成功取得到序號
+            if (dealIdNumber) {              
+                console.log(dealIdNumber);
+                
+                // 4. 將參數名稱 'sn' 和序號值預填到產生器對應的欄位                
+                paramValueInput.value = dealIdNumber;
+                fileID = dealIdNumber;                
             }
     });
 
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
